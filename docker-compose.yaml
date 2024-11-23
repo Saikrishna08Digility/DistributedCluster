@@ -1,0 +1,83 @@
+services:
+  cassandra-node1-dc1:
+    image: cassandra:5.0.2
+    container_name: cassandra-node1-dc1
+    environment:
+      - CASSANDRA_CLUSTER_NAME=DistributedTransactionsCluster
+      - CASSANDRA_DC=dc1
+      - CASSANDRA_RACK=rack1
+      - CASSANDRA_SEEDS=cassandra-node1-dc1,cassandra-node2-dc1
+      - CASSANDRA_LISTEN_ADDRESS=cassandra-node1-dc1
+      - CASSANDRA_BROADCAST_ADDRESS=cassandra-node1-dc1
+      - CASSANDRA_BROADCAST_RPC_ADDRESS=cassandra-node1-dc1
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - CASSANDRA_COMMITLOG_SYNC=batch
+      - CASSANDRA_COMMITLOG_SYNC_PERIOD_IN_MS=10000
+      - JVM_OPTS=-Dcassandra.schema_agreement_wait_seconds=180 -javaagent:/myLibs/CassPromFileExporter-j17-all.jar
+      - CASSANDRA_NUM_TOKENS=256
+    ports:
+      - "9042:9042"
+    networks:
+      - cassandra-network-dtc
+    volumes:
+      - cassandra-node1-dc1-data:/var/lib/cassandra
+      - ./myLibs:/myLibs # Mount the folder containing the exporter JAR
+      - ./cassandra-config/cassandra-env.sh:/etc/cassandra/cassandra-env.sh # Custom cassandra-env.sh
+
+  cassandra-node2-dc1:
+    image: cassandra:5.0.2
+    container_name: cassandra-node2-dc1
+    environment:
+      - CASSANDRA_CLUSTER_NAME=DistributedTransactionsCluster
+      - CASSANDRA_DC=dc1
+      - CASSANDRA_RACK=rack1
+      - CASSANDRA_SEEDS=cassandra-node1-dc1,cassandra-node2-dc1
+      - CASSANDRA_LISTEN_ADDRESS=cassandra-node2-dc1
+      - CASSANDRA_BROADCAST_ADDRESS=cassandra-node2-dc1
+      - CASSANDRA_BROADCAST_RPC_ADDRESS=cassandra-node2-dc1
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - CASSANDRA_COMMITLOG_SYNC=batch
+      - CASSANDRA_COMMITLOG_SYNC_PERIOD_IN_MS=10000
+      - JVM_OPTS=-Dcassandra.schema_agreement_wait_seconds=180 -javaagent:/myLibs/CassPromFileExporter-j17-all.jar
+      - CASSANDRA_NUM_TOKENS=256
+    ports:
+      - "9043:9042"
+    networks:
+      - cassandra-network-dtc
+    volumes:
+      - cassandra-node2-dc1-data:/var/lib/cassandra
+      - ./myLibs:/myLibs # Mount the folder containing the exporter JAR
+      - ./cassandra-config/cassandra-env.sh:/etc/cassandra/cassandra-env.sh # Custom cassandra-env.sh
+
+  cassandra-node1-dc2:
+    image: cassandra:5.0.2
+    container_name: cassandra-node1-dc2
+    environment:
+      - CASSANDRA_CLUSTER_NAME=DistributedTransactionsCluster
+      - CASSANDRA_DC=dc2
+      - CASSANDRA_RACK=rack1
+      - CASSANDRA_SEEDS=cassandra-node1-dc1,cassandra-node1-dc2
+      - CASSANDRA_LISTEN_ADDRESS=cassandra-node1-dc2
+      - CASSANDRA_BROADCAST_ADDRESS=cassandra-node1-dc2
+      - CASSANDRA_BROADCAST_RPC_ADDRESS=cassandra-node1-dc2
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - CASSANDRA_COMMITLOG_SYNC=batch
+      - CASSANDRA_COMMITLOG_SYNC_PERIOD_IN_MS=10000
+      - JVM_OPTS=-Dcassandra.schema_agreement_wait_seconds=180 -javaagent:/myLibs/CassPromFileExporter-j17-all.jar
+      - CASSANDRA_NUM_TOKENS=256
+    ports:
+      - "9044:9042"
+    networks:
+      - cassandra-network-dtc
+    volumes:
+      - cassandra-node1-dc2-data:/var/lib/cassandra
+      - ./myLibs:/myLibs # Mount the folder containing the exporter JAR
+      - ./cassandra-config/cassandra-env.sh:/etc/cassandra/cassandra-env.sh # Custom cassandra-env.sh
+
+networks:
+  cassandra-network-dtc:
+
+volumes:
+  cassandra-node1-dc1-data:
+  cassandra-node2-dc1-data:
+  cassandra-node1-dc2-data:
