@@ -13,16 +13,18 @@ services:
       - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
       - CASSANDRA_COMMITLOG_SYNC=batch
       - CASSANDRA_COMMITLOG_SYNC_PERIOD_IN_MS=10000
-      - JVM_OPTS=-Dcassandra.schema_agreement_wait_seconds=180 -javaagent:/myLibs/CassPromFileExporter-j17-all.jar
       - CASSANDRA_NUM_TOKENS=256
+      - JVM_OPTS=-Dcassandra.schema_agreement_wait_seconds=180 -javaagent:/opt/jmx_prometheus_javaagent.jar=7070:/etc/cassandra/cassandra.yml
+      
     ports:
       - "9042:9042"
+      - "7070:7070" # Expose JMX metrics
     networks:
       - cassandra-network-dtc
     volumes:
       - cassandra-node1-dc1-data:/var/lib/cassandra
-      - ./myLibs:/myLibs # Mount the folder containing the exporter JAR
-      - ./cassandra-config/cassandra-env.sh:/etc/cassandra/cassandra-env.sh # Custom cassandra-env.sh
+      - ./jmx_prometheus_javaagent-1.0.1.jar:/opt/jmx_prometheus_javaagent.jar
+      - ./cassandra.yml:/etc/cassandra/cassandra.yml
 
   cassandra-node2-dc1:
     image: cassandra:5.0.2
@@ -38,16 +40,17 @@ services:
       - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
       - CASSANDRA_COMMITLOG_SYNC=batch
       - CASSANDRA_COMMITLOG_SYNC_PERIOD_IN_MS=10000
-      - JVM_OPTS=-Dcassandra.schema_agreement_wait_seconds=180 -javaagent:/myLibs/CassPromFileExporter-j17-all.jar
       - CASSANDRA_NUM_TOKENS=256
+      - JVM_OPTS=-Dcassandra.schema_agreement_wait_seconds=180 -javaagent:/opt/jmx_prometheus_javaagent.jar=7070:/etc/cassandra/cassandra.yml
     ports:
       - "9043:9042"
+      - "7071:7070"
     networks:
       - cassandra-network-dtc
     volumes:
       - cassandra-node2-dc1-data:/var/lib/cassandra
-      - ./myLibs:/myLibs # Mount the folder containing the exporter JAR
-      - ./cassandra-config/cassandra-env.sh:/etc/cassandra/cassandra-env.sh # Custom cassandra-env.sh
+      - ./jmx_prometheus_javaagent-1.0.1.jar:/opt/jmx_prometheus_javaagent.jar
+      - ./cassandra.yml:/etc/cassandra/cassandra.yml
 
   cassandra-node1-dc2:
     image: cassandra:5.0.2
@@ -63,16 +66,17 @@ services:
       - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
       - CASSANDRA_COMMITLOG_SYNC=batch
       - CASSANDRA_COMMITLOG_SYNC_PERIOD_IN_MS=10000
-      - JVM_OPTS=-Dcassandra.schema_agreement_wait_seconds=180 -javaagent:/myLibs/CassPromFileExporter-j17-all.jar
+      - JVM_OPTS=-Dcassandra.schema_agreement_wait_seconds=180 -javaagent:/opt/jmx_prometheus_javaagent.jar=7070:/etc/cassandra/cassandra.yml
       - CASSANDRA_NUM_TOKENS=256
     ports:
       - "9044:9042"
+      - "7072:7070"
     networks:
       - cassandra-network-dtc
     volumes:
       - cassandra-node1-dc2-data:/var/lib/cassandra
-      - ./myLibs:/myLibs # Mount the folder containing the exporter JAR
-      - ./cassandra-config/cassandra-env.sh:/etc/cassandra/cassandra-env.sh # Custom cassandra-env.sh
+      - ./jmx_prometheus_javaagent-1.0.1.jar:/opt/jmx_prometheus_javaagent.jar
+      - ./cassandra.yml:/etc/cassandra/cassandra.yml
 
 networks:
   cassandra-network-dtc:
