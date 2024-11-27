@@ -77,6 +77,60 @@ services:
       - cassandra-node1-dc2-data:/var/lib/cassandra
       - ./jmx_prometheus_javaagent-1.0.1.jar:/opt/jmx_prometheus_javaagent.jar
       - ./cassandra.yml:/etc/cassandra/cassandra.yml
+  node-exporter1:
+    image: prom/node-exporter:latest
+    container_name: node-exporter1
+    depends_on:
+      - cassandra-node1-dc1
+    ports:
+      - "9100:9100"
+    networks:
+      - cassandra-network-dtc
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - --path.procfs=/host/proc
+      - --path.sysfs=/host/sys
+      - --collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc)($|/)"
+  
+  node-exporter2:
+    image: prom/node-exporter:latest
+    container_name: node-exporter2
+    depends_on:
+      - cassandra-node2-dc1
+    ports:
+      - "9101:9100"
+    networks:
+      - cassandra-network-dtc
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - --path.procfs=/host/proc
+      - --path.sysfs=/host/sys
+      - --collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc)($|/)"
+  
+  node-exporter3:
+    image: prom/node-exporter:latest
+    container_name: node-exporter3
+    depends_on:
+      - cassandra-node1-dc2
+    ports:
+      - "9102:9100"
+    networks:
+      - cassandra-network-dtc
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - --path.procfs=/host/proc
+      - --path.sysfs=/host/sys
+      - --collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc)($|/)"
+  
 
 networks:
   cassandra-network-dtc:
