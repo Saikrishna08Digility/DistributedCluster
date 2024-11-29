@@ -1,2 +1,1 @@
-rules:
-  - pattern: ".*"
+materialized_views_enabled: true
