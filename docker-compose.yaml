@@ -50,12 +50,12 @@ services:
       - CASSANDRA_COMMITLOG_SYNC=batch
       - CASSANDRA_COMMITLOG_SYNC_PERIOD_IN_MS=10000
       - CASSANDRA_NUM_TOKENS=256
-      - CASSANDRA_INITIAL_TOKEN= 1
+      - CASSANDRA_INITIAL_TOKEN=1
       - JVM_OPTS=-Dcassandra.schema_agreement_wait_seconds=360 -Dcassandra.partitioner=org.apache.cassandra.dht.Murmur3Partitioner -javaagent:/opt/jmx_prometheus_javaagent.jar=7071:/etc/cassandra/cassandra.yml
       - MATERIALIZED_VIEWS_ENABLED=true
     ports:
       - "9043:9042"
-      - "7071:7070"
+      - "7071:7071" # Expose JMX metrics
     networks:
       - cassandra-network-dtc
     volumes:
@@ -83,12 +83,12 @@ services:
       - CASSANDRA_COMMITLOG_SYNC_PERIOD_IN_MS=10000
       - JVM_OPTS=-Dcassandra.schema_agreement_wait_seconds=360 -Dcassandra.partitioner=org.apache.cassandra.dht.Murmur3Partitioner -javaagent:/opt/jmx_prometheus_javaagent.jar=7072:/etc/cassandra/cassandra.yml
       - CASSANDRA_NUM_TOKENS=256
-      - CASSANDRA_INITIAL_TOKEN= 2
+      - CASSANDRA_INITIAL_TOKEN=2
       - MATERIALIZED_VIEWS_ENABLED=true
 
     ports:
       - "9044:9042"
-      - "7072:7070"
+      - "7072:7072" # Expose JMX metrics
     networks:
       - cassandra-network-dtc
     volumes:

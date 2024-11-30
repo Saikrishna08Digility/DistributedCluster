@@ -1,1 +1,0 @@
-JVM_OPTS="$JVM_OPTS -Dcassandra.schema_agreement_wait_seconds=180 -javaagent:/myLibs/CassPromFileExporter-j17-all.jar"

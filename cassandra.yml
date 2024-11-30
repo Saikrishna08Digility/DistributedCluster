@@ -1,1 +1,6 @@
+# cluster_name: 'DistributedTransactionsCluster'
+# num_tokens: 256
+# commitlog_sync: batch
+# commitlog_sync_period_in_ms: 10000
+# endpoint_snitch: GossipingPropertyFileSnitch
 materialized_views_enabled: true
